@@ -1,0 +1,28 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import PricingItem from "@components/pricingItem.astro";
+import { getPosts, getPriceContents } from "data/api";
+
+let priceData = await getPriceContents();
+const logout = () => {
+  if (!Astro.cookies.has("userInfo")) {
+    Astro.redirect("/signin");
+  }
+};
+---
+
+<Layout title="Pricing" logout={() => logout()}>
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Pricing</Fragment>
+      <Fragment slot="desc">
+        Simple & Predictablee pricing. No Surprises.
+      </Fragment>
+    </Sectionhead>
+    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-screen-lg mt-12">
+      {priceData?.map((item) => <PricingItem plan={item} />)}
+    </div>
+  </Container>
+</Layout>

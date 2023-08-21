@@ -1,0 +1,73 @@
+---
+// @ts-ignore
+import { Icon } from "astro-icon";
+
+const features = [
+  {
+    title: "Smart Contracts",
+    description:
+      "Build your custom smart contracts with highly skilled blockchain developers that focus on security and gas efficiency.",
+    icon: "bx:bxs-briefcase",
+  },
+  {
+    title: "Website Design & Development",
+    description:
+      "Never worry about  speed, security, or compatibility, our process ensures all your websites are fast, responsive, and secure.",
+    icon: "bx:bxs-window-alt",
+  },
+  {
+    title: "Tokenization",
+    description:
+      "Launch a token with as a full service firm, we have the legal counsil to help us get your idea on the blockchain. ",
+    icon: "bx:bxs-data",
+  },
+  {
+    title: "Bot Intergration",
+    description:
+      "Automation will save you a lot money and time. Our developers can create you a custom solution will automated bots for your twitter & discord.",
+    icon: "bx:bxs-bot",
+  },
+  {
+    title: "DApp Development",
+    description:
+      "From secure wallet connection, soft staking, staking (locked) to custom marketplaces, we can build out a fast and secure solution.",
+    icon: "bx:bxs-pizza",
+  },
+  {
+    title: "Audit & Code Review",
+    description:
+      "With over 10 years of experience, we have a keen eye for bugs and code optimization. Our team can bring an ease of mind to your launch.",
+    icon: "bx:bxs-file-find",
+  },
+];
+const {
+  data: { contextTitle, contextDescription, featuresList },
+} = Astro.props;
+---
+
+<div class="mt-16 md:mt-0">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    {contextTitle}
+  </h2>
+  <p class="text-lg mt-4 text-slate-600">
+    {contextDescription}
+  </p>
+</div>
+
+<div class="grid sm:grid-cols-2 md:grid-cols-3 mt-16 gap-16">
+  {
+    Object.values(featuresList).map((feature, index) => (
+      <div class="flex gap-4 items-start" key={index}>
+        <div class="mt-1 bg-black rounded-full  p-2 w-8 h-8 shrink-0">
+          <Icon class="text-white" name={feature?.featureIcon} />
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg">{feature?.featureTitle}</h3>
+          <p class="text-slate-500 mt-2 leading-relaxed">
+            {feature?.featureDescription}
+          </p>
+        </div>
+      </div>
+    ))
+  }
+</div>

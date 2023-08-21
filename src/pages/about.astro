@@ -1,0 +1,69 @@
+---
+import { getCollection } from "astro:content";
+import { Picture } from "@astrojs/image/components";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import { getAboutContents } from "@data/api";
+
+const data = await getAboutContents();
+let pages = "";
+if (data?.pages) {
+  pages = data.pages?.edges?.[0]?.node?.aboutSections;
+  var { teamMembers = {} } = pages;
+  var memberList = [];
+  for (let [key, value] of Object.entries(teamMembers)) {
+    memberList.push(value);
+  }
+}
+---
+
+<Layout title="About">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">{pages?.pageTitle}</Fragment>
+      <Fragment slot="desc">
+        {pages?.subTitle}
+      </Fragment>
+    </Sectionhead>
+
+    <div class="flex flex-col gap-4 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">
+        {pages?.contextTitle}
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        {pages?.contextDescription}
+      </p>
+    </div>
+    <div class="grid md:grid-cols-4 gap-10 mx-auto max-w-4xl mt-12">
+      {
+        memberList?.map((teamMemberEntry) => (
+          <div class="group">
+            <div class="w-full aspect-square">
+              <Picture
+                src={teamMemberEntry?.profileImage?.mediaItemUrl}
+                alt={teamMemberEntry?.teamMemberName}
+                sizes="(max-width: 800px) 100vw, 400px"
+                widths={[200, 400]}
+                aspectRatio="1:1"
+                background="#ffffff"
+                fit="cover"
+                position="center"
+                class="w-full rounded-md rounded transition group-hover:-translate-y-1 group-hover:shadow-xl"
+              />
+            </div>
+
+            <div class="mt-4 text-center">
+              <h2 class="text-lg text-gray-800">
+                {teamMemberEntry?.teamMemberName}
+              </h2>
+              <h3 class="text-sm text-slate-500">
+                {teamMemberEntry?.memberDesignation}
+              </h3>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+</Layout>

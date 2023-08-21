@@ -1,0 +1,39 @@
+---
+// @ts-ignore
+import { Icon } from "astro-icon";
+import { Debug } from "astro/components";
+
+const {
+  data: { contextTitle, logos },
+} = Astro.props;
+const perChunk = 4; // items per chunk
+const result = Object.values(logos)
+  .reduce((resultArray, item, index) => {
+    const chunkIndex = Math.floor(index / perChunk);
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(item);
+
+    return resultArray;
+  }, [])
+  ?.reverse();
+const [row1, row2, row3] = result;
+---
+
+<div class="mt-24">
+  <h2 class="text-center text-slate-500">
+    {contextTitle}
+  </h2>
+  <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
+    {row1?.map((logo) => <Icon class="h-8 md:h-10" name={logo} />)}
+  </div>
+  <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
+    {row2?.map((logo) => <Icon class="h-8 md:h-10" name={logo} />)}
+  </div>
+  <div class="flex gap-8 md:gap-20 items-center justify-center mt-10 flex-wrap">
+    {row3?.map((logo) => <Icon class="h-8 md:h-10" name={logo} />)}
+  </div>
+</div>

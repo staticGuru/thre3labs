@@ -1,0 +1,118 @@
+---
+import Container from "@components/container.astro";
+import Link from "@components/ui/link.astro";
+import Dropdown from "./dropdown.astro";
+import Logo from "../../assets/logo.svg";
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import Signoutbutton from "./signoutbutton";
+const { logout } = Astro.props;
+const IsUser = Astro.cookies.get("userInfo");
+
+const menuitems = [
+  {
+    title: "Services",
+    path: "#",
+    children: [
+      { title: "Smart Contracts", path: "#" },
+      { title: "Website Development", path: "#" },
+      { title: "DApp Development", path: "#" },
+    ],
+  },
+  {
+    title: "Pricing",
+    path: "/pricing",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+  },
+];
+---
+
+<Container>
+  <header class="flex flex-col lg:flex-row justify-between items-center my-5">
+    <Astronav>
+      <div class="flex w-full lg:w-auto items-center justify-between">
+        <a href="https://thre3labs.com/" class="flex items-center">
+          <img src={Logo} class="h-6 mr-3 sm:h-9" alt="Thre3 Labs Logo" />
+          <span
+            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+            >Thre3 Lab</span
+          >
+        </a>
+        <div class="block lg:hidden">
+          <MenuIcon class="w-4 h-4 text-gray-800" />
+        </div>
+      </div>
+      <MenuItems class="hidden w-full lg:w-auto mt-2 lg:flex lg:mt-0">
+        <ul class="flex flex-col lg:flex-row lg:gap-3">
+          {
+            menuitems.map((item, index) => (
+              <>
+                {item.children && (
+                  <Dropdown
+                    title={item.title}
+                    children={item.children}
+                    lastItem={index === menuitems.length - 1}
+                  />
+                )}
+
+                {!item.children && (
+                  <li>
+                    <a
+                      href={item.path}
+                      class="flex lg:px-3 py-2 text-gray-600 hover:text-gray-900">
+                      {item.title}
+                    </a>
+                  </li>
+                )}
+              </>
+            ))
+          }
+        </ul>
+        <div class="lg:hidden flex items-center mt-3 gap-4">
+          {
+            IsUser ? (
+              <Signoutbutton client:only logout={() => logout()} />
+            ) : (
+              <>
+                <Link href="#" style="muted" block size="md">
+                  Log in
+                </Link>
+                <Link href="#" size="md" block>
+                  Sign up
+                </Link>
+              </>
+            )
+          }
+        </div>
+      </MenuItems>
+    </Astronav>
+    <div>
+      <div class="hidden lg:flex items-center gap-4">
+        {
+          IsUser ? (
+            <Signoutbutton client:only logout={() => logout()} />
+          ) : (
+            <>
+              <Link href="/signin" size="md">
+                Sign in
+              </Link>
+              <Link href="/signup" size="md">
+                Sign up
+              </Link>
+            </>
+          )
+        }
+      </div>
+    </div>
+  </header>
+</Container>
